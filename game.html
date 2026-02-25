@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>像素肉鸽冒险</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
+body{background:#1a1a2e;font-family:Arial,sans-serif;color:#fff;overflow:hidden}
+#g{width:100vw;height:100vh;display:flex;flex-direction:column;background:#0f0f1a}
+#u{background:rgba(30,30,40,.95);padding:8px 12px;border-bottom:2px solid #4a4a6a}
+.r{display:flex;justify-content:space-between;align-items:center;margin:4px 0}
+.b{height:18px;background:rgba(0,0,0,.5);border:1px solid #4a4a6a;border-radius:3px;overflow:hidden;position:relative}
+.bf{height:100%;transition:width .3s}
+.hp{background:linear-gradient(90deg,#dc3232,#ff6b6b)}
+.exp{background:linear-gradient(90deg,#32c732,#5cff5c)}
+.bt{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;font-weight:bold;text-shadow:1px 1px 1px #000}
+.go{color:#ffd700}.fl{color:#64b5f6}
+.c0{color:#969696}.c1{color:#1e90ff}.c2{color:#a335ee}.c3{color:#ffa500}
+#o{position:absolute;inset:0;background:rgba(0,0,0,.9);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;z-index:100}
+.hd{display:none!important}
+.mt{font-size:clamp(24px,8vw,36px);color:#ffd700;margin-bottom:15px;text-align:center;text-shadow:0 0 15px rgba(255,215,0,.5)}
+.ms{font-size:clamp(14px,4vw,18px);color:#64b5f6;margin-bottom:20px}
+.mi{background:rgba(40,40,60,.8);padding:20px;border-radius:10px;border:2px solid #6a6a8a;max-width:350px;width:100%;margin-bottom:20px}
+.mi h3{color:#ffd700;margin:10px 0 8px;font-size:clamp(14px,4vw,16px)}
+.mi ul{list-style:none;padding:0;color:#ccc;font-size:clamp(12px,3vw,14px)}
+.mi li{margin:5px 0}.mi li::before{content:"▸ ";color:#64b5f6}
+.sb{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff;border:none;padding:15px 40px;font-size:clamp(16px,5vw,20px);border-radius:8px;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(76,175,80,.4)}
+.sb:active{transform:scale(.95)}
+#e{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:92%;max-width:360px;background:rgba(30,30,40,.98);border:3px solid #6a6a8a;border-radius:10px;padding:18px;z-index:150}
+.et{font-size:clamp(18px,5vw,22px);color:#ffd700;margin-bottom:12px;text-align:center}
+.ec{display:flex;gap:8px;margin-bottom:12px}
+.eb{flex:1;background:rgba(40,40,60,.8);border:2px solid #4a4a6a;border-radius:8px;padding:10px}
+.el{font-size:11px;color:#888;margin-bottom:4px}
+.en{font-size:clamp(13px,3.5vw,15px);font-weight:bold;margin:4px 0}
+.es{font-size:clamp(11px,3vw,12px);color:#ccc;line-height:1.5}
+.pd{text-align:center;font-size:clamp(14px,4vw,18px);margin:10px 0}
+.pu{color:#4caf50}.pdn{color:#f44336}
+.ebs{display:flex;gap:10px}
+.ebtn{flex:1;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;font-size:clamp(13px,3.5vw,15px)}
+.yes{background:linear-gradient(135deg,#4caf50,#2e7d32);color:#fff}
+.no{background:linear-gradient(135deg,#f44336,#c62828);color:#fff}
+.ebtn:active{transform:scale(.95)}
+#l{position:absolute;bottom:75px;right:10px;left:10px;max-height:110px;background:rgba(30,30,40,.85);border:2px solid #6a6a8a;border-radius:8px;padding:8px;overflow-y:auto;font-size:11px}
+.le{color:#ccc;padding:3px 0;border-bottom:1px solid rgba(100,100,100,.3)}
+.lc{color:#ffd700;font-weight:bold}
+#c{position:absolute;bottom:0;left:0;right:0;height:70px;background:rgba(30,30,40,.95);border-top:2px solid #6a6a6a;display:flex;justify-content:space-around;align-items:center;padding:10px;gap:8px}
+.btn{flex:1;height:50px;border:none;border-radius:10px;font-weight:bold;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer}
+.atk{background:linear-gradient(135deg,#f44336,#c62828);flex:2;max-width:180px}
+.heal{background:linear-gradient(135deg,#2196f3,#1565c0);max-width:100px}
+.btn:active{transform:scale(.93);opacity:.85}
+.bi{font-size:20px}.bt2{font-size:11px}
+canvas{flex:1;width:100%;display:block}
+#d{position:absolute;inset:0;pointer-events:none;z-index:50}
+.dn{position:absolute;font-size:clamp(18px,5vw,22px);font-weight:bold;text-shadow:2px 2px 4px rgba(0,0,0,.8);animation:fu .8s ease-out forwards}
+@keyframes fu{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-50px) scale(1.3)}}
+</style>
+</head>
+<body>
+<div id="g">
+<canvas id="cv"></canvas>
+<div id="u" class="hd">
+<div class="r">
+<div>Lv.<span id="lv" style="font-weight:bold">1</span></div>
+<div class="b" style="flex:1;max-width:140px;margin:0 10px"><div class="bf hp" id="hpb"></div><span class="bt" id="hpt">100/100</span></div>
+<div class="go">💰<span id="gd">0</span></div>
+</div>
+<div class="r">
+<div class="b" style="flex:1;max-width:140px;margin-right:10px"><div class="bf exp" id="exb"></div><span class="bt" id="ext">0/100</span></div>
+<div class="fl">🏰<span id="fl">1</span>F</div>
+<div style="font-size:12px">武:<span id="wp" class="c0">剑</span></div>
+<div style="font-size:12px">力:<span id="pw">15</span></div>
+</div>
+</div>
+<div id="o">
+<div id="mm">
+<div class="mt">🗡️ 像素肉鸽冒险 🗡️</div>
+<div class="ms">手机触屏版</div>
+<div class="mi">
+<h3>🎮 游戏说明</h3>
+<ul>
+<li>每层有 3-5 个怪物</li>
+<li>每 10 层有 Boss</li>
+<li>击败怪物获得装备</li>
+<li>Boss 必掉高级装备!</li>
+</ul>
+<h3>📱 操作方式</h3>
+<ul>
+<li>按住攻击键连续攻击</li>
+<li>点击治疗恢复生命</li>
+</ul>
+</div>
+<button class="sb" onclick="startGame()">开始游戏</button>
+</div>
+<div id="go" class="hd">
+<div class="mt" style="color:#f44336">💀 游戏结束 💀</div>
+<div style="font-size:clamp(14px,4vw,18px);color:#ccc;margin:12px 0">到达: <span id="ffl">1</span> 层</div>
+<div style="font-size:clamp(14px,4vw,18px);color:#ccc;margin:12px 0">等级: <span id="flv">1</span> 级</div>
+<div style="font-size:clamp(14px,4vw,18px);color:#ccc;margin:12px 0">金币: <span id="fgd">0</span></div>
+<div style="font-size:clamp(14px,4vw,18px);color:#ccc;margin:12px 0">击杀: <span id="fkl">0</span></div>
+<button class="sb" onclick="startGame()" style="margin-top:20px">重新开始</button>
+</div>
+</div>
+<div id="e" class="hd">
+<div class="et">✨ 发现新装备!</div>
+<div class="ec">
+<div class="eb">
+<div class="el">当前装备:</div>
+<div class="en" id="own">剑</div>
+<div class="es" id="ows"></div>
+</div>
+<div class="eb">
+<div class="el">新装备:</div>
+<div class="en" id="nwn">剑</div>
+<div class="es" id="nws"></div>
+</div>
+</div>
+<div class="pd" id="pdi"></div>
+<div class="ebs">
+<button class="ebtn yes" onclick="equip(true)">装备</button>
+<button class="ebtn no" onclick="equip(false)">保留</button>
+</div>
+</div>
+<div id="l" class="hd"></div>
+<div id="d"></div>
+<div id="c" class="hd">
+<button class="btn atk" id="ab"><span class="bi">⚔️</span><span class="bt2">攻击</span></button>
+<button class="btn heal" id="hb"><span class="bi">💊</span><span class="bt2">治疗</span></button>
+</div>
+</div>
+<script>
+const Q={C:0,R:1,E:2,L:3},QN=['普通','稀有','史诗','传说'],QC=['c0','c1','c2','c3'],WT={剑:{a:1,s:1,c:.05},刀:{a:1.2,s:.9,c:.08},枪:{a:1.1,s:1.1,c:.06},斧:{a:1.5,s:.7,c:.12},锤:{a:1.6,s:.6,c:.15},弓:{a:.9,s:1.3,c:.1}};
+let gs='menu',p,m,dw,fl=1,mk=0,tk=0,at=null;
+const cv=document.getElementById('cv'),cx=cv.getContext('2d');
+const $=id=>document.getElementById(id);
+function resize(){cv.width=innerWidth;cv.height=innerHeight}
+resize();addEventListener('resize',resize);
+class W{
+constructor(t,q,l=1){
+this.t=t||Object.keys(WT)[Math.random()*6|0];
+const r=Math.random()*100;
+this.q=q??(r<3?Q.L:r<15?Q.E:r<40?Q.R:Q.C);
+this.l=l;
+const tm=WT[this.t],qm=[1,1.3,1.6,2][this.q];
+this.a=Math.floor(10*tm.a*qm*(1+l*.1));
+this.s=tm.s;
+this.cr=tm.c*(1+l*.05)
+}
+gn(){return['','精良的','史诗级的','传说的'][this.q]+this.t}
+gp(){return Math.floor(this.a*this.s*(1+this.cr))}
+}
+class P{
+constructor(){
+this.lv=1;this.xp=0;this.xn=100;this.gd=0;
+this.mh=100;this.hp=100;this.ba=10;this.bd=5;this.bc=.05;
+this.w=new W('剑',Q.C);this.cd=0
+}
+get ta(){return this.ba+this.w.a}
+get td(){return this.bd}
+get tc(){return this.bc+this.w.cr}
+get as(){return Math.max(12,25-Math.floor(this.w.s*8))}
+atk(){if(this.cd<=0){this.cd=this.as;const ic=Math.random()<this.tc;return{d:ic?this.ta*2|0:this.ta,ic}}}
+hit(d){this.hp-=Math.max(1,d-this.td)}
+heal(a){this.hp=Math.min(this.mh,this.hp+a)}
+exp(x){this.xp+=x;while(this.xp>=this.xn){this.xp-=this.xn;this.lv++;this.mh+=10;this.hp=this.mh;this.ba+=2;this.bd++;this.xn=Math.floor(this.xn*1.3);log('🎉 升级! Lv.'+this.lv)}}
+}
+class M{
+constructor(l,b){
+const ml=(1+l*.15)*(b?3:1);
+this.lv=l;this.b=b;
+this.mh=Math.floor(100*ml);this.hp=this.mh;
+this.a=Math.floor(10*ml);this.d=Math.floor(5*ml);
+this.xr=Math.floor(20*ml);this.gr=Math.floor(10*ml);this.ht=0
+}
+hit(d){this.hp-=Math.max(1,d-this.d);this.ht=15}
+}
+function drawChar(x,y,tp,co,s){
+const p=s/8,pt=tp==='p'?['  ####  ',' #+##+# ','########','###||###','  ####  ','  ####  ',' ##  ## ',' ##  ## ']:tp==='m'?['##    ##',' # ## # ','########','  ####  ','########','## ## ##','  ####  ',' #    # ']:['## ## ##','#  ##  #','########','########','########','## ## ##','  #  #  ','  #  #  '];
+cx.fillStyle=co;
+pt.forEach((r,ry)=>{[...r].forEach((c,rx)=>{
+if(c==='#')cx.fillRect(x+rx*p,y+ry*p,p,p);
+else if(c==='+'){cx.fillStyle='#fff';cx.fillRect(x+rx*p,y+ry*p,p,p);cx.fillStyle=co}
+else if(c==='|'){cx.fillStyle='#32c732';cx.fillRect(x+rx*p,y+ry*p,p,p);cx.fillStyle=co}
+})}
+}
+function draw(){
+cx.clearRect(0,0,cv.width,cv.height);
+if(gs==='menu')return;
+const ts=40;
+for(let x=0;x<cv.width;x+=ts)for(let y=80;y<cv.height;y+=ts){cx.fillStyle=Math.floor((x+y)/ts)%2?'#323246':'#3c3c50';cx.fillRect(x,y,ts,ts)}
+if(m&&gs!=='equip'){
+const s=m.b?56:40,co=m.ht>0?'#fff':m.b?'#ff3232':'#b45050';
+const mx=cv.width/2-s/2,my=cv.height*.32;
+drawChar(mx,my,m.b?'b':'m',co,s);
+const bw=s,bx=mx,by=my-16;
+cx.fillStyle='#4a2020';cx.fillRect(bx,by,bw,7);
+cx.fillStyle='#dc3232';cx.fillRect(bx,by,bw*Math.max(0,m.hp)/m.mh,7);
+cx.fillStyle='#fff';cx.font='bold 13px sans-serif';cx.textAlign='center';cx.fillText('Lv.'+m.lv,mx+s/2,by-4);
+if(m.b){cx.fillStyle='#ffd700';cx.font='bold 12px sans-serif';cx.fillText('👑 BOSS',mx+s/2,by-18)}
+if(m.ht>0)m.ht--
+}
+drawChar(40,cv.height-150,'p','#64c8ff',40);
+cx.fillStyle='#fff';cx.font='13px sans-serif';cx.textAlign='left';cx.fillText('Lv.'+p.lv,40,cv.height-158);
+if(p.cd>0)p.cd--
+}
+function updateUI(){
+$('lv').textContent=p.lv;$('fl').textContent=fl;$('gd').textContent=p.gd;$('hpb').style.width=p.hp/p.mh*100+'%';$('hpt').textContent=p.hp+'/'+p.mh;$('exb').style.width=p.xp/p.xn*100+'%';$('ext').textContent=p.xp+'/'+p.xn;
+const w=$('wp');w.textContent=p.w.gn();w.className=QC[p.w.q];$('pw').textContent=p.ta+p.td
+}
+function showDmg(d,ic,x,y){
+const e=document.createElement('div');e.className='dn';
+e.textContent=d+(ic?'!':'');e.style.cssText='left:'+(x|0)+'px;top:'+(y|0)+'px;color:'+(ic?'#ffd700':'#fff');
+$('d').appendChild(e);setTimeout(()=>e.remove(),800)
+}
+function log(m){
+const l=$('l'),e=document.createElement('div');
+e.className='le'+(m.includes('暴')?' lc':'');e.textContent=m;
+l.appendChild(e);l.scrollTop=1e9;
+while(l.children.length>15)l.firstChild.remove()
+}
+function spawnM(){
+m=new M(fl,fl%10===0&&!mk);
+if(m.b)log('⚠️ Boss出现!')
+}
+function pAtk(){
+if(!m||m.hp<=0||gs!=='playing')return;
+const r=p.atk();if(r){const ad=m.hit(r.d)|0;showDmg(ad,r.ic,cv.width/2-15,cv.height*.3);log(r.ic?ad+' 暴击!':ad+' 伤害');if(m.hp<=0)onMD()}
+}
+function onMD(){
+tk++;p.exp(m.xr);p.gd+=m.gr;
+log((m.b?'🎉 Boss! ':'')+m.xr+'EXP '+m.gr+'G');
+if(Math.random()<(m.b?.8:.3)){dw=new W(null,m.b?Q.L:void 0,fl);showEq()}else nextF();
+updateUI()
+}
+function nextF(){
+mk++;
+if(mk>=(fl%10?3+Math.random()*3|0:1)){fl++;mk=0;log('🏰 进入 '+fl+' 层');if(fl%5===0){p.heal(Math.floor(p.mh*.2));log('💚 恢复生命');updateUI()}}
+spawnM()
+}
+function showEq(){
+gs='equip';
+const o=p.w,n=dw;
+$('own').textContent=o.gn();$('own').className='en '+QC[o.q];
+$('ows').innerHTML='攻击:'+o.a+' 速度:'+o.s.toFixed(1)+'<br>暴击:'+Math.floor(o.cr*100)+'%<br><b>战力:'+o.gp()+'</b>';$('nwn').textContent=n.gn();$('nwn').className='en '+QC[n.q];$('nws').innerHTML='攻击:'+n.a+' 速度:'+n.s.toFixed(1)+'<br>暴击:'+Math.floor(n.cr*100)+'%<br><b>战力:'+n.gp()+'</b>';
+const df=n.gp()-o.gp();
+$('pdi').textContent='战力:'+(df>0?'+':'')+df;$('pdi').className='pd '+(df>0?'pu':'pdn');
+$('e').classList.remove('hd')
+}
+function equip(yes){
+$('e').classList.add('hd');
+if(yes){p.w=dw;log('装备了 '+dw.gn()+'!')}else log('保留原装备');
+dw=null;gs='playing';updateUI();nextF()
+}
+function gameOver(){
+gs='gameover';stopAtk();
+$('u').classList.add('hd');$('l').classList.add('hd');$('c').classList.add('hd');$('ffl').textContent=fl;$('flv').textContent=p.lv;$('fgd').textContent=p.gd;$('fkl').textContent=tk;$('mm').classList.add('hd');$('go').classList.remove('hd');$('o').classList.remove('hd')
+}
+function startGame(){
+p=new P;m=null;dw=null;fl=1;mk=tk=0;
+['o','mm','go','u','l','c'].forEach(id=>$(id).classList.add('hd'));$('u').classList.remove('hd');$('l').classList.remove('hd');$('c').classList.remove('hd');
+$('l').innerHTML='';gs='playing';spawnM();updateUI();log('🎮 开始冒险!')
+}
+function startAtk(){if(!at){pAtk();at=setInterval(pAtk,80)}}
+function stopAtk(){if(at){clearInterval(at);at=null}}
+function heal(){
+if(p.gd>=50&&p.hp<p.mh){p.gd-=50;p.heal(Math.floor(p.mh*.3));log('💊 恢复生命');updateUI()}
+else if(p.gd<50)log('❌ 金币不足')
+}
+function loop(){
+if(gs==='playing'&&m&&m.hp>0&&Math.random()<.025){const d=m.a|0;p.hit(d);log('受 '+d+' 伤害');updateUI();if(p.hp<=0)gameOver()}
+draw();requestAnimationFrame(loop)
+}
+$('ab').addEventListener('touchstart',e=>{e.preventDefault();startAtk()});$('ab').addEventListener('touchend',e=>{e.preventDefault();stopAtk()});
+$('ab').addEventListener('touchcancel',e=>{e.preventDefault();stopAtk()});$('hb').addEventListener('touchstart',e=>{e.preventDefault();heal()});
+document.addEventListener('contextmenu',e=>e.preventDefault());
+loop();
+</script>
+</body>
+</html>
